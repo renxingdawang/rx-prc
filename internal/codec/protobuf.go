@@ -1,16 +1,24 @@
 package codec
 
-import "github.com/golang/protobuf/proto"
+import (
+	"github.com/golang/protobuf/proto"
+)
 
-type ProtobufCodec struct{}
+type ProtoCodec struct{}
 
-func (c *ProtobufCodec) Encode(msg interface{}) ([]byte, error) {
-	return proto.Marshal(msg.(proto.Message))
+func (p *ProtoCodec) Marshal(v any) ([]byte, error) {
+	msg, _ := v.(proto.Message)
+	return proto.Marshal(msg)
 }
-func (c *ProtobufCodec) Decode(data []byte, msg interface{}) error {
-	return proto.Unmarshal(data, msg.(proto.Message))
+
+func (p *ProtoCodec) Unmarshal(data []byte, v any) error {
+	msg, _ := v.(proto.Message)
+	return proto.Unmarshal(data, msg)
 }
 
-func (c *ProtobufCodec) Name() string {
+func (p *ProtoCodec) Name() string {
 	return "protobuf"
 }
+
+// Proto 实例
+var Proto = &ProtoCodec{}
